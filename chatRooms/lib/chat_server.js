@@ -20,7 +20,7 @@ exports.listen = function(server) {
 			socket.emit('rooms', io.sockets.manager.rooms);
 		});
 
-		hanldeClientDisconnection(socket, nickNames, namesUsed);
+		handleClientDisconnection(socket, nickNames, namesUsed);
 	});
 };
 
