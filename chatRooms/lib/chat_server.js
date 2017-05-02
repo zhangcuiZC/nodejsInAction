@@ -63,3 +63,57 @@ function joinRoom(socket, room) {
 		});
 	}
 }
+//更名请求的处理
+function handleNameChangeAttempts(socket, nickNames, namesUsed) {
+	socket.on('nameAttempt', function(name) {
+		if (name.indexOf('Guest') == 0) {
+			socket.emit('nameResult', {
+				success: false,
+				message: 'Names cannot begin with "Guest".'
+			});
+		}else {
+			if (namesUsed.indexOf(name) == -1) {
+				var previousName = nickNames[socket.id];
+				var previousNameIndex = namesUsed.indexOf(previousName);
+				namesUsed.push(name);
+				nickNames[socket.id] = name;
+				delete namesUsed[previousNameIndex];
+				socket.emit('nameResult', {
+					success: true,
+					name: name
+				});
+				socket.broadcast.to(currentRoom[socket.id]).emit('message', {
+					text: previousName + ' is now known as ' + name + '.'
+				});
+			}else {
+				socket.emit('nameResult', {
+					success: false,
+					message: 'That name is already in use.'
+				});
+			}
+		}
+	});
+}
+//发送聊天消息
+function handleMessageBroadcasting(socket) {
+	socket.on('message', function(message) {
+		socket.broadcast.to(message.room).emit('message', {
+			text: nickNames[socket.id] + ': ' + message.text
+		});
+	});
+}
+//创建房间
+function handleRoomJoining(socket) {
+	socket.on('join', function(room) {
+		socket.leave(currentRoom[socket.id]);
+		joinRoom(socket, room.newRoom);
+	});
+}
+//用户断开连接
+function handleClientDisconnection(socket) {
+	socket.on('disconnect', function() {
+		var nameIndex = namesUsed.indexOf(nickNames[socket.id]);
+		delete namesUsed[nameIndex];
+		delete nickNames[socket.id];
+	});
+}
