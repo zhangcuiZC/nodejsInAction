@@ -1,7 +1,7 @@
-var fs = require('fs');
-var request = require('request');
-var htmlparser = require('htmlparser');
-var configFilename = './rss_feeds.txt';
+let fs = require('fs');
+let request = require('request');
+let htmlparser = require('htmlparser');
+let configFilename = './rss_feeds.txt';
 
 // function checkForRSSFile() {
 // 	fs.exists(configFilename, function(exists) {
@@ -83,13 +83,13 @@ function downloadRSSFeed(feedUrl) {
 // 	console.log(item.link);
 // }
 function parseRSSFeed(rss) {
-	var handler = new htmlparser.RssHandler();
-	var parser = new htmlparser.Parser(handler);
+	let handler = new htmlparser.RssHandler();
+	let parser = new htmlparser.Parser(handler);
 	parser.parseComplete(rss);
 	if (!handler.dom.items.length) {
 		throw new Error('No RSS items found.');
 	}
-	var item = handler.dom.items.shift();
+	let item = handler.dom.items.shift();
 	console.log(item.title);
 	console.log(item.link);
 }
