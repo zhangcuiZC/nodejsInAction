@@ -113,7 +113,7 @@ function parseRSSFeed(rss) {
 // next();
 
 async function getRSSFeed() {
-	await fs.exists(configFilename);
+	await checkForRSSFile();
 	let url = await readRSSFile(configFilename);
 	let rss = await downloadRSSFeed(url);
 	return rss;
