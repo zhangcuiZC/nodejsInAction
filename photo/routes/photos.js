@@ -11,20 +11,7 @@ var storage = multer.diskStorage({
 		cb(null, file.originalname);
 	}
 });
-
 var upload = multer({ storage: storage });
-
-
-var photos = [];
-photos.push({
-	name: 'Node.js Logo',
-	path: 'http://nodejs.org/images/logos/nodejs-green.png'
-});
-
-photos.push({
-	name: 'Ryan Speaking',
-	path: 'http://nodejs.org/images/ryan-speaker.jpg'
-});
 
 router.get('/', function(req, res, next) {
 	Photo.find({}, function(err, photos) {
@@ -60,6 +47,17 @@ router.post('/upload', upload.any(), function(req, res, next) {
 		res.redirect('/');
 	});
 
+});
+
+router.get('/photo/:id/download', function(req, res, next) {
+	var id = req.params.id;
+	Photo.findById(id, function(err, photo) {
+		if (err) {
+			return next(err);
+		}
+		var _path = path.join(__dirname, '../public', photo.path);
+		res.download(_path);
+	});
 });
 
 module.exports = router;
