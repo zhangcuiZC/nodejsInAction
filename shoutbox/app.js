@@ -8,6 +8,8 @@ var session = require('express-session');
 
 var index = require('./routes/index');
 var register = require('./routes/register');
+var login = require('./routes/login');
+var user = require('./lib/middleware/user');
 
 var app = express();
 
@@ -23,9 +25,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({secret: 'zz'}));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(user);
 
 app.use('/', index);
 app.use('/register', register);
+app.use('/login', login);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

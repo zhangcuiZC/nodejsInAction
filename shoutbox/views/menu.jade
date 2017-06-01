@@ -1,0 +1,8 @@
+#menu
+	if locals.user
+		span.name hello, #{user.name}
+		a(href="/post") post
+		a(href="/login/out") logout
+	else
+		a(href="/login") login
+		a(href="/register") register
