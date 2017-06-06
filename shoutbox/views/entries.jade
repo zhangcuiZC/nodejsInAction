@@ -1,0 +1,9 @@
+extends layout
+
+block content
+	each item in entries
+		.entry
+			h3 #{item.title}
+			p #{item.body}
+			p Posted by #{item.username}
+	include pager

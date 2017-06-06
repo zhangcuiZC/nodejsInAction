@@ -10,6 +10,8 @@ var index = require('./routes/index');
 var register = require('./routes/register');
 var login = require('./routes/login');
 var user = require('./lib/middleware/user');
+var entries = require('./routes/entries');
+var post = require('./routes/post');
 
 var app = express();
 
@@ -27,10 +29,11 @@ app.use(session({secret: 'zz'}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(user);
 
-app.use('/', index);
+
 app.use('/register', register);
 app.use('/login', login);
-
+app.use('/post', post);
+app.use('/', entries);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
