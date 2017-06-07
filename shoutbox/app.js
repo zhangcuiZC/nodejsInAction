@@ -12,6 +12,8 @@ var login = require('./routes/login');
 var user = require('./lib/middleware/user');
 var entries = require('./routes/entries');
 var post = require('./routes/post');
+// var api = require('./routes/api');
+// var auth = require('./lib/middleware/auth');
 
 var app = express();
 
@@ -27,6 +29,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({secret: 'zz'}));
 app.use(express.static(path.join(__dirname, 'public')));
+// app.use('/api', auth, api);
 app.use(user);
 
 
